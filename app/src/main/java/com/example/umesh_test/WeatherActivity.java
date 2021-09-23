@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.umesh_test.WeatherModel.Weather;
 
 import retrofit2.Call;
@@ -22,20 +23,14 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class WeatherActivity extends AppCompatActivity{
+public class WeatherActivity extends AppCompatActivity {
     EditText city_Name;
-    //TextView show_Result_Button;
-    TextView temp_centigrete,temp_farhnheit,latitute,longtitute;
-      Button show_Result_Button;
-    String Name,name;
-   // Float Lat;
-   // Float Long;
+    TextView temp_centigrete, temp_farhnheit, latitute, longtitute;
+    Button show_Result_Button;
+    String Name, name;
 
     Float Tem_c;
     Float Tem_f;
-    //String apikey = "da723e3c518048f29b064430211609";
-    String apikey ="31d03a975f3fffd2dc293f4bfa8c6772" ;
-   // String url = "api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,19 +44,16 @@ public class WeatherActivity extends AppCompatActivity{
         latitute = findViewById(R.id.latitute);
         longtitute = findViewById(R.id.longtude);
 
-       // Name = city_Name.getText().toString().trim();
-          show_Result_Button.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                  if(city_Name.getText().toString().isEmpty())
-                  {
-                      Toast.makeText(getApplicationContext(),"fill",Toast.LENGTH_SHORT);
-                  }
-                  else {
-                      LoadWeatherApi();
-                  }
-              }
-          });
+        show_Result_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (city_Name.getText().toString().isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "fill", Toast.LENGTH_SHORT);
+                } else {
+                    LoadWeatherApi();
+                }
+            }
+        });
 
     }
 
@@ -74,7 +66,7 @@ public class WeatherActivity extends AppCompatActivity{
                 .build();
 
         Api api = retrofit.create(Api.class);
-        Call<Weather> call = api.getWeatherData("35c9f92ac5bf4df0811144140212307",city_Name.getText().toString().trim());
+        Call<Weather> call = api.getWeatherData("35c9f92ac5bf4df0811144140212307", city_Name.getText().toString().trim());
 
         call.enqueue(new Callback<Weather>() {
             @Override
@@ -83,8 +75,8 @@ public class WeatherActivity extends AppCompatActivity{
                 Weather list = response.body();
                 Float lat = list.getLocation().getLat();
                 Float lon = list.getLocation().getLon();
-                 Float temc= list.getCurrent().getTemp_c();
-                  Float temf= list.getCurrent().getTemp_f();
+                Float temc = list.getCurrent().getTemp_c();
+                Float temf = list.getCurrent().getTemp_f();
 
                 temp_centigrete.setText(Float.toString(temc));
                 temp_farhnheit.setText(Float.toString(temf));
@@ -97,7 +89,7 @@ public class WeatherActivity extends AppCompatActivity{
 
             @Override
             public void onFailure(Call<Weather> call, Throwable t) {
-                Toast.makeText(getApplicationContext(),t.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 

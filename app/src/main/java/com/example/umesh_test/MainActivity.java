@@ -41,21 +41,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText editText_MobileNo, editText_FullName, editText_Gender, editText_dob, editText_Addres1, editText_Addres2, editText_Pincode;
+    EditText editText_MobileNo, editText_FullName, editText_dob, editText_Addres1, editText_Addres2, editText_Pincode;
     TextView check_Button, register_Button;
     TextView textView_District, textView_State;
     AppCompatSpinner spinner;
     CalendarView calendarView;
     List<Model> list;
     List<PostOffice> plist;
-    String pincode;
     String state, dis;
-    String district;
     String pinc;
-    String pinCode;
-
-    // creating a variable for request queue.
-    private RequestQueue mRequestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
 
         check_Button = findViewById(R.id.check_pincode);
         register_Button = findViewById(R.id.registration);
-        mRequestQueue = Volley.newRequestQueue(MainActivity.this);
         list = new ArrayList<>();
         plist = new ArrayList<>();
 
@@ -145,7 +138,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-        private void Registraion() {
+
+    private void Registraion() {
 
         register_Button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,18 +172,14 @@ public class MainActivity extends AppCompatActivity {
                     editText_Addres1.setError("Enter address");
                     editText_Addres1.requestFocus();
                     return;
-                }
-                    else if(addres1.length()<3)
-                {
+                } else if (addres1.length() < 3) {
                     editText_Addres1.setError("Enter address");
                     editText_Addres1.requestFocus();
-                }
-                else if (pincode.isEmpty()) {
-                      editText_Pincode.setError("Please Fill Pincode");
-                            return;
-                          }
-                else {
-                    Intent intent = new Intent(MainActivity.this,WeatherActivity.class);
+                } else if (pincode.isEmpty()) {
+                    editText_Pincode.setError("Please Fill Pincode");
+                    return;
+                } else {
+                    Intent intent = new Intent(MainActivity.this, WeatherActivity.class);
                     startActivity(intent);
                 }
             }
@@ -210,29 +200,13 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<List<Model>>() {
             @Override
             public void onResponse(Call<List<Model>> call, retrofit2.Response<List<Model>> response) {
-               List<Model> list = response.body();
-                Log.d("list", "onResponse: " + response.code() + " "+new Gson().toJson(response.body()));
-                state =list.get(0).getPostOffice().get(0).getState();
+                List<Model> list = response.body();
+                Log.d("list", "onResponse: " + response.code() + " " + new Gson().toJson(response.body()));
+                state = list.get(0).getPostOffice().get(0).getState();
                 dis = list.get(0).getPostOffice().get(0).getDistrict();
-                Log.d("lis",response.body().toString());
+                Log.d("lis", response.body().toString());
                 textView_District.setText(state);
                 textView_State.setText(dis);
-
-                // String s =   list.get(0).getPostOffice().get(0).getState();
-              /*  for (int i = 0; i < list.size(); i++) {
-                    String status = list.get(i).getStatus();
-
-                    plist = list.get(i).getPostOffice();
-
-                    for (int k = 0; k < plist.size(); k++) {
-                        plist.get(k).getPincode();
-                        dis = plist.get(k).getDistrict();
-                        state = plist.get(k).getState();
-
-                        textView_State.setText(state);
-                        textView_District.setText(dis);
-                    }
-                }*/
             }
 
             @Override
